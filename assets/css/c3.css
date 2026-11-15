@@ -1,0 +1,754 @@
+/* ==========================================================================
+   Práctico — boceto C v3 · "La Tesis", columna vertebral de consultora
+   El sistema (tokens v3, radios 10/16/20, sombras sh-1..sh-4, secciones
+   112/72/56, reveals de 36px/700ms, botones, footer) vive en base2.css y NO
+   se duplica acá. Este archivo sólo agrega lo propio de C v3.
+
+   Columna vertebral (tomada de una consultora financiera):
+     hero con foto a sangre + cita del cliente como H1
+     problemas numerados → cifras → etapas + diferenciales → tabla
+     diferenciales numerados → cierre navy → footer de 3 columnas
+
+   Regla del acento: nunca texto terracota sobre navy, nunca fondo de bloque.
+   Terracota sólo en: números de las listas, reglas de 2px, checks, el pill de
+   sección y el CTA principal.
+
+   Contraste medido (WCAG 2.1, sRGB):
+   · #A8442A sobre blanco  #FFFFFF ... 5.96:1  -> apto texto (>= 4.5:1)
+   · #A8442A sobre tinte   #F6F7FB ... 5.57:1  -> apto texto
+   · #A8442A sobre navy    #1E2C5B ... 2.25:1  -> sólo trazo/regla, nunca texto
+   · #FFFFFF sobre #A8442A (CTA)   ... 5.96:1  -> apto texto
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   0. Tokens propios de C v3 (base2.css no se toca)
+   -------------------------------------------------------------------------- */
+:root {
+  --accent: #A8442A;            /* 5.96:1 sobre blanco · 5.57:1 sobre el tinte */
+  --display-xl: 40px;           /* cita del hero: 40 → 52 → 64 → 72 */
+}
+
+@media (min-width: 768px)  { :root { --display-xl: 52px; } }
+@media (min-width: 1024px) { :root { --display-xl: 64px; } }
+@media (min-width: 1280px) { :root { --display-xl: 72px; } }
+
+/* Superficie alterna: blanco / --surface-tint (base2 §1) */
+.c3-band { background: var(--surface-tint); }
+
+/* --------------------------------------------------------------------------
+   1. HERO · foto a sangre + cita del cliente como H1
+   Capas, de atrás adelante:
+     .c3-hero__media  la foto (decorativa: aria-hidden, alt="")
+     .c3-hero__img    el mismo tratamiento de A: gris + brightness .92
+     .c3-hero__veil   el scrim navy (94 → 62 %) del lado del texto
+     .container       el texto, sin filtros: queda nítido
+   La hairline de 2px del pie crece al cargar (una sola vez, sin parallax).
+   -------------------------------------------------------------------------- */
+.c3-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 560px;
+  background-color: var(--navy);
+  color: var(--on-navy-1);
+  padding-top: calc(var(--header-h) + 56px);
+  padding-bottom: 80px;
+}
+
+@media (min-width: 768px) {
+  .c3-hero { min-height: 620px; padding-top: calc(var(--header-h) + 72px); padding-bottom: 104px; }
+}
+
+@media (min-width: 1024px) {
+  .c3-hero { min-height: 700px; padding-bottom: 120px; }
+}
+
+@media (min-width: 1280px) {
+  .c3-hero { padding-top: calc(var(--header-h) + 96px); padding-bottom: 136px; }
+}
+
+.c3-hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+/* El <picture> es sólo un contenedor de fuentes: sin caja propia, así el
+   <img> conserva el 100% de alto sobre la figura. */
+.c3-hero__media picture { display: contents; }
+
+.c3-hero__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  /* Idéntico a a2.css §1: gris, apenas oscurecido, contraste +.06 */
+  filter: grayscale(1) brightness(0.92) contrast(1.06);
+}
+
+.c3-hero__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg,
+    rgba(30, 44, 91, 0.94) 0%,
+    rgba(30, 44, 91, 0.86) 45%,
+    rgba(30, 44, 91, 0.62) 100%);
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .c3-hero__veil { background: rgba(30, 44, 91, 0.92); }
+}
+
+.c3-hero__inner {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+/* Eyebrow con regla terracota de 24 × 2 (regla, no texto: permitido).
+   La regla se alinea con la primera línea, no con el centro del bloque:
+   si el eyebrow parte en dos líneas (360), no queda flotando. */
+.c3-hero__eyebrow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: var(--on-navy-2);
+  letter-spacing: 0.08em;
+  text-wrap: balance;
+}
+
+.c3-hero__eyebrow::before {
+  content: "";
+  flex: 0 0 24px;
+  width: 24px;
+  height: 2px;
+  margin-top: 8px;
+  background: var(--accent);
+}
+
+/* La cita: --display-xl, comillas tipográficas en el copy, 2–3 líneas */
+.c3-hero__quote {
+  font-size: var(--display-xl);
+  line-height: 1.04;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--on-navy-1);
+  max-width: 22ch;
+  text-wrap: balance;
+}
+
+@media (min-width: 1280px) {
+  .c3-hero__quote { line-height: 1.02; }
+}
+
+.c3-hero__sub {
+  margin-top: 24px;
+  max-width: 40ch;
+  font-size: 19px;
+  line-height: 1.45;
+  font-weight: 600;
+  color: var(--on-navy-1);
+}
+
+.c3-hero__para {
+  margin-top: 12px;
+  max-width: 52ch;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--on-navy-2);
+}
+
+.c3-hero__actions {
+  margin-top: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.c3-arrow {
+  display: inline-block;
+  transition: translate 180ms var(--ease-out);
+}
+.btn:hover .c3-arrow { translate: 2px 0; }
+
+/* La hairline del hero: 2px terracota que se dibujan de izquierda a derecha */
+.c3-hero__hair {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(1);
+  transform-origin: left center;
+  animation: c3-hair-grow 900ms var(--ease-out) 320ms both;
+}
+
+@keyframes c3-hair-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Foco sobre navy: el anillo navy de base2 no se vería */
+.c3-hero .btn:focus-visible,
+.c3-hero .btn--quiet:focus-visible { outline-color: var(--white); }
+
+/* --------------------------------------------------------------------------
+   1.1 Header sobre foto · cuatro enlaces + CTA + selector no entran juntos
+   Se retira el descriptor (redundante con el eyebrow del hero) y el CTA del
+   header por debajo de 1280: el nav queda en una sola línea desde 1024.
+   -------------------------------------------------------------------------- */
+.page-c3 .header__descriptor { display: none; }
+.page-c3 .nav__list { gap: 20px; }
+
+@media (max-width: 1279px) {
+  .page-c3 .header__cta { display: none; }
+}
+
+/* --------------------------------------------------------------------------
+   2. CTA principal en terracota (única superficie con el acento)
+   Texto blanco sobre #A8442A = 5.96:1.
+   -------------------------------------------------------------------------- */
+.c3-btn-accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--white);
+}
+
+.c3-btn-accent:hover {
+  background: color-mix(in srgb, var(--accent) 82%, var(--navy));
+  border-color: color-mix(in srgb, var(--accent) 82%, var(--navy));
+  box-shadow: var(--sh-2);
+  transform: translateY(-1px);
+}
+
+.c3-btn-accent:active {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: var(--sh-1);
+  transform: translateY(0);
+}
+
+.c3-btn-accent:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+.c3-close .c3-btn-accent:focus-visible { outline-color: var(--white); }
+
+/* --------------------------------------------------------------------------
+   3. Cabecera de sección · pill terracota + H2 + bajada
+   -------------------------------------------------------------------------- */
+.c3-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 13px;
+  border: 1px solid var(--accent);
+  border-radius: var(--r-pill);
+  color: var(--accent);
+  font-size: 11px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+}
+
+.c3-head > .h2 { max-width: 30ch; }
+
+/* --------------------------------------------------------------------------
+   4. Listas numeradas (no tarjetas)
+   Número a 40px terracota a la izquierda · título y cuerpo a la derecha ·
+   hairline entre items. Se usa en "Lo que resolvemos" y "Por qué Práctico".
+   -------------------------------------------------------------------------- */
+.c3-list {
+  margin-top: 40px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.c3-item {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 4px 16px;
+  align-items: start;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+/* La lista no cierra con hairline: el último item va sin línea inferior */
+.c3-item:last-child { border-bottom: 0; }
+
+@media (min-width: 768px) {
+  .c3-list { margin-top: 48px; }
+  .c3-item {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 4px 32px;
+    padding: 30px 0;
+  }
+}
+
+.c3-item__n {
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+
+@media (min-width: 768px) {
+  .c3-item__n { font-size: 40px; }
+}
+
+.c3-item__body { min-width: 0; }
+
+.c3-item__title {
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+}
+
+@media (min-width: 1280px) {
+  .c3-item__title { font-size: 24px; }
+}
+
+.c3-item__text {
+  margin-top: 8px;
+  max-width: 58ch;
+  color: var(--navy-soft);
+}
+
+/* 320 de ancho: el título largo de la lista ("Reportes e información") no
+   cabe en la columna a 20px y deja una palabra sola; a 18 entra en una línea. */
+@media (max-width: 339px) {
+  .c3-item__title,
+  .c3-phase__name { font-size: 18px; }
+}
+
+/* --------------------------------------------------------------------------
+   5. Cifras · 64px tabular-nums, número navy y label terracota
+   -------------------------------------------------------------------------- */
+.c3-figures {
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line-strong);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px 24px;
+}
+
+@media (min-width: 560px) {
+  .c3-figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  .c3-figures {
+    margin-top: 48px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 32px 40px;
+  }
+}
+
+.c3-figure__value {
+  font-size: 52px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  color: var(--navy);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 768px) {
+  .c3-figure__value { font-size: 64px; }
+}
+
+.c3-figure__label {
+  margin-top: 10px;
+  max-width: 26ch;
+  font-size: 15px;
+  line-height: 1.45;
+  font-weight: 600;
+  color: var(--accent);          /* 5.57:1 sobre el tinte */
+}
+
+/* --------------------------------------------------------------------------
+   6. Etapas (4) + diferenciales con check (4)
+   2 × 2 con hairlines: mismo lenguaje de lista, sin tarjetas.
+   -------------------------------------------------------------------------- */
+.c3-phases {
+  margin-top: 40px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.c3-phase {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 4px 16px;
+  align-items: start;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+/* Sin hairline de cierre: en una columna cae sólo en el último; en la grilla
+   de 2 × 2 cae en los dos últimos (fila final). */
+.c3-phase:last-child { border-bottom: 0; }
+
+@media (min-width: 768px) {
+  .c3-phases {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 48px;
+    margin-top: 48px;
+  }
+  .c3-phase {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 4px 24px;
+    padding: 28px 0;
+  }
+  /* En 2 columnas la fila final es el par 3-4: sin hairline en los dos */
+  .c3-phase:nth-last-child(-n + 2) { border-bottom: 0; }
+}
+
+.c3-phase__n {
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+
+@media (min-width: 768px) {
+  .c3-phase__n { font-size: 40px; }
+}
+
+.c3-phase__name {
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+}
+
+@media (min-width: 1280px) {
+  .c3-phase__name { font-size: 24px; }
+}
+
+.c3-phase__text {
+  margin-top: 6px;
+  max-width: 40ch;
+  color: var(--navy-soft);
+}
+
+.c3-phase__deliver {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  max-width: 48ch;
+}
+
+.c3-phase__label {
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--navy-soft);
+}
+
+.c3-phase__value {
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+/* --- diferenciales con check que se dibuja ------------------------------- */
+.c3-diffs {
+  margin-top: 40px;
+  display: grid;
+  gap: 18px;
+}
+
+@media (min-width: 768px) {
+  .c3-diffs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 48px;
+    margin-top: 48px;
+  }
+}
+
+.c3-diff {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.c3-diff__text {
+  max-width: 44ch;
+  color: var(--navy);
+}
+
+.c3-check {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-top: 1px;
+  color: var(--accent);
+  flex: none;
+}
+
+.c3-check--sm { width: 18px; height: 18px; margin-top: 4px; }
+
+.c3-check svg { display: block; width: 100%; height: 100%; }
+
+/* El trazo se dibuja cuando el JS marca .is-drawn (o de entrada con reduce) */
+.c3-check__path {
+  stroke-dasharray: 25;
+  stroke-dashoffset: 25;
+  transition: stroke-dashoffset 520ms var(--ease-out);
+}
+
+.c3-check__path.is-drawn { stroke-dashoffset: 0; }
+
+/* --------------------------------------------------------------------------
+   7. Tabla comparativa · 5 filas, dos columnas
+   Izquierda en gris con guion, derecha con check terracota, hairlines.
+   En móvil se apila con los rótulos "Otros" / "Práctico" (data-label).
+   -------------------------------------------------------------------------- */
+.c3-table-wrap {
+  margin-top: 40px;
+  padding: 4px 20px;
+  background: var(--white);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-2);
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .c3-table-wrap { margin-top: 48px; padding: 8px 32px; }
+}
+
+.c3-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.c3-table th {
+  padding: 18px 0 12px;
+  border-bottom: 2px solid var(--line-strong);
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--navy-soft);
+  vertical-align: bottom;
+}
+
+.c3-table th + th { padding-left: 24px; }
+.c3-table th:last-child { color: var(--navy); }
+
+.c3-table td {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 17px;
+  line-height: 1.55;
+  vertical-align: top;
+}
+
+.c3-table tr:last-child td { border-bottom: 0; }
+
+.c3-table td:first-child {
+  width: 50%;
+  padding-right: 24px;
+  color: var(--navy-soft);
+}
+
+.c3-table td:last-child {
+  padding-left: 24px;
+  color: var(--navy);
+  font-weight: 500;
+}
+
+/* Guion de la columna izquierda: decorativo, no se lee */
+.c3-table__dash {
+  display: inline-block;
+  width: 12px;
+  color: var(--navy-soft);
+  opacity: 0.45;
+}
+
+/* Check + texto de la columna derecha (y guion + texto en la izquierda) */
+.c3-cell {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.c3-cell--other { grid-template-columns: 12px minmax(0, 1fr); }
+
+@media (max-width: 767px) {
+  /* Encabezado sólo para lectores de pantalla: los rótulos bajan a cada celda */
+  .c3-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .c3-table,
+  .c3-table tbody,
+  .c3-table tr,
+  .c3-table td {
+    display: block;
+    width: auto;
+  }
+
+  .c3-table tr {
+    padding: 12px 0 8px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .c3-table tr:last-child { border-bottom: 0; }
+
+  .c3-table td {
+    padding: 8px 0;
+    border-bottom: 0;
+    width: auto;
+  }
+
+  .c3-table td:first-child { width: auto; padding-right: 0; }
+  .c3-table td:last-child { padding-left: 0; }
+
+  .c3-table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--navy-soft);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   8. Cierre · única banda navy de la página
+   Terracota sólo en el CTA (texto blanco sobre el acento).
+   -------------------------------------------------------------------------- */
+.c3-close {
+  background: var(--navy);
+  color: var(--on-navy-1);
+  padding-block: 64px;
+  scroll-margin-top: 96px;
+}
+
+@media (min-width: 768px) {
+  .c3-close { padding-block: 96px; }
+}
+
+@media (min-width: 1280px) {
+  .c3-close { padding-block: 112px; }
+}
+
+.c3-close__inner {
+  display: grid;
+  gap: 32px;
+  align-items: start;
+}
+
+.c3-close__line {
+  max-width: 26ch;
+  font-size: 28px;
+  line-height: 1.16;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--on-navy-1);
+  text-wrap: balance;
+}
+
+@media (min-width: 768px) {
+  .c3-close__line { font-size: 40px; line-height: 1.12; }
+}
+
+.c3-close__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .c3-close__inner {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 64px;
+    align-items: center;
+  }
+  .c3-close__actions { justify-content: flex-end; }
+}
+
+/* --------------------------------------------------------------------------
+   9. Footer · 3 columnas de enlaces + lockup con tagline
+   base2 §10 define 3 columnas (1.4fr + 1fr + 1fr). Acá hay lockup + 3
+   columnas: 2 columnas hasta 1023 y 4 desde 1024.
+   -------------------------------------------------------------------------- */
+@media (min-width: 768px) {
+  .c3-footer .footer__top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 40px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .c3-footer .footer__top {
+    grid-template-columns: minmax(0, 1.3fr) repeat(3, minmax(0, 1fr));
+    gap: 40px;
+  }
+}
+
+.c3-footer__brand { min-width: 0; }
+
+/* --------------------------------------------------------------------------
+   10. Movimiento reducido · política única de base2 §19
+   Se apaga el movimiento; se conservan opacidad, color y sombra.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .c3-hero__hair { animation: none; transform: none; }
+
+  .c3-check__path {
+    stroke-dashoffset: 0 !important;
+    transition: none;
+  }
+
+  .c3-arrow { transition: none; }
+  .btn:hover .c3-arrow { translate: none; }
+}
+
+/* --------------------------------------------------------------------------
+   11. Aire al pie de los bloques
+   -------------------------------------------------------------------------- */
+#resolvemos > .container > :last-child,
+#resultados > .container > :last-child,
+#metodo > .container > :last-child,
+#comparativa > .container > :last-child,
+#porque > .container > :last-child { margin-bottom: 0; }

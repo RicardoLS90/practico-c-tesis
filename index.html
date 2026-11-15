@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es" class="page-enter">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Práctico — La conversación empieza por el negocio</title>
+  <meta name="description" content="Consultoría de negocio, reportes e información y automatización de procesos. Cuatro etapas, cada una con un entregable que se puede verificar." data-i18n-content="meta.description">
+  <link rel="canonical" href="./">
+  <meta name="theme-color" content="#1E2C5B">
+
+  <!-- Open Graph y Twitter. La imagen es la del hero mientras no haya una OG
+       propia: mismo recorte 16:9, 1920 × 1080. -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:title" content="Práctico — La conversación empieza por el negocio">
+  <meta property="og:description" content="Consultoría de negocio, reportes e información y automatización de procesos. Cuatro etapas, cada una con un entregable que se puede verificar.">
+  <meta property="og:image" content="assets/img/ref/a-hero.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/img/favicon/favicon.ico" sizes="any">
+  <link rel="icon" href="assets/img/favicon/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/img/favicon/apple-touch-icon-180.png">
+  <link rel="manifest" href="assets/img/favicon/site.webmanifest">
+
+  <link rel="preload" href="assets/fonts/PlusJakartaSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/PlusJakartaSans-ExtraBold.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Fondo del hero: se precarga para que entre antes del primer pintado.
+       Mismo srcset que el <img> del hero (100vw, WebP). -->
+  <link rel="preload" as="image" type="image/webp" fetchpriority="high" imagesizes="100vw"
+        imagesrcset="assets/img/ref/a-hero-640.webp 640w, assets/img/ref/a-hero-1024.webp 1024w, assets/img/ref/a-hero-1600.webp 1600w">
+
+  <link rel="stylesheet" href="assets/css/base2.css">
+  <link rel="stylesheet" href="assets/css/c3.css">
+</head>
+<body class="page-c3">
+  <a class="skip-link" href="#main" data-i18n="a11y.skip"></a>
+
+  <header class="site-header" id="siteHeader">
+    <div class="container header__inner">
+      <a class="brand" href="./" data-i18n-aria="a11y.logo">
+        <img class="brand__logo brand__logo--neg" src="assets/img/practico-horizontal-negativo.svg" alt="Práctico" data-i18n-alt="brand.logoAlt">
+        <img class="brand__logo brand__logo--pos" src="assets/img/practico-lockup-sin-tagline.svg" alt="" aria-hidden="true">
+      </a>
+      <span class="header__descriptor" data-i18n="brand.descriptor"></span>
+      <span class="header__spacer"></span>
+
+      <nav class="nav" id="navPanel" data-i18n-aria="a11y.nav">
+        <ul class="nav__list" data-nav-list></ul>
+      </nav>
+
+      <a class="btn btn--sm btn--primary header__cta" href="#" data-mailto="diagnostico" data-i18n="nav.cta"></a>
+
+      <button class="lang" type="button" data-lang-toggle aria-label="ES / EN">
+        <span class="lang__opt" data-lang-opt="es">ES</span>
+        <span class="lang__sep" aria-hidden="true">|</span>
+        <span class="lang__opt" data-lang-opt="en">EN</span>
+      </button>
+
+      <button class="nav__toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="navPanel">
+        <span class="nav__bars" aria-hidden="true"><span></span><span></span></span>
+        <span data-when="closed" data-i18n="nav.menu"></span>
+        <span data-when="open" data-i18n="nav.close"></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ================================================================ HERO
+         Foto a sangre con el tratamiento de A (grayscale .92 + scrim navy)
+         y la frase del cliente como H1. Sin parallax: la foto está quieta.
+         La cita es copy literal del brief y no lleva atribución; no es un
+         testimonio. -->
+    <section class="c3-hero" id="inicio" aria-labelledby="heroQuote">
+      <figure class="c3-hero__media" aria-hidden="true">
+        <picture>
+          <source type="image/webp" sizes="100vw"
+                  srcset="assets/img/ref/a-hero-640.webp 640w, assets/img/ref/a-hero-1024.webp 1024w, assets/img/ref/a-hero-1600.webp 1600w">
+          <img class="c3-hero__img" src="assets/img/ref/a-hero-1024.jpg"
+               srcset="assets/img/ref/a-hero-640.jpg 640w, assets/img/ref/a-hero-1024.jpg 1024w, assets/img/ref/a-hero-1600.jpg 1600w"
+               sizes="100vw" width="1920" height="1080" alt=""
+               loading="eager" decoding="async" fetchpriority="high">
+        </picture>
+        <span class="c3-hero__veil"></span>
+      </figure>
+
+      <div class="container c3-hero__inner">
+        <p class="eyebrow c3-hero__eyebrow" data-i18n="hero.eyebrow"></p>
+        <h1 class="c3-hero__quote" id="heroQuote" data-i18n="hero.quote"></h1>
+        <p class="c3-hero__sub" data-i18n="hero.sub"></p>
+        <p class="c3-hero__para" data-i18n="hero.para"></p>
+
+        <div class="c3-hero__actions">
+          <a class="btn c3-btn-accent" href="#" data-mailto="diagnostico">
+            <span data-i18n="hero.cta1"></span>
+          </a>
+          <a class="btn btn--outline-inverse" href="#metodo">
+            <span data-i18n="hero.cta2"></span>
+            <span class="c3-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Hairline de 2px que crece al cargar (única animación del hero) -->
+      <span class="c3-hero__hair" aria-hidden="true"></span>
+    </section>
+
+    <!-- ======================================================= 01 PROBLEMAS -->
+    <section class="section" id="resolvemos" aria-labelledby="s2Title">
+      <div class="container">
+        <div class="section-head c3-head">
+          <p class="c3-pill" data-i18n="s2.pill"></p>
+          <h2 class="h2" id="s2Title" data-i18n="s2.title"></h2>
+          <p class="section-lead" data-i18n="s2.intro"></p>
+        </div>
+        <ol class="c3-list" id="c3Problems" data-c3-reveal data-c3-reveal-list></ol>
+      </div>
+    </section>
+
+    <!-- ======================================================= 02 RESULTADOS -->
+    <section class="section c3-band" id="resultados" aria-labelledby="s3Title">
+      <div class="container">
+        <div class="section-head c3-head">
+          <p class="c3-pill" data-i18n="s3.pill"></p>
+          <h2 class="h2" id="s3Title" data-i18n="s3.title"></h2>
+          <p class="section-lead" data-i18n="s3.intro"></p>
+        </div>
+        <ul class="c3-figures" id="c3Figures" data-c3-reveal data-c3-reveal-list></ul>
+      </div>
+    </section>
+
+    <!-- ========================================================== 03 MÉTODO -->
+    <section class="section" id="metodo" aria-labelledby="s4Title">
+      <div class="container">
+        <div class="section-head c3-head">
+          <p class="c3-pill" data-i18n="s4.pill"></p>
+          <h2 class="h2" id="s4Title" data-i18n="s4.title"></h2>
+          <p class="section-lead" data-i18n="s4.intro"></p>
+        </div>
+
+        <ol class="c3-phases" id="c3Phases" data-c3-reveal data-c3-reveal-list></ol>
+        <ul class="c3-diffs" id="c3Diffs" data-c3-reveal data-c3-reveal-list></ul>
+      </div>
+    </section>
+
+    <!-- ===================================================== 04 COMPARATIVA
+         La tabla se apila en móvil y cada celda muestra su rótulo
+         (Otros / Práctico) desde data-label. -->
+    <section class="section c3-band" id="comparativa" aria-labelledby="s5Title">
+      <div class="container">
+        <div class="section-head c3-head">
+          <p class="c3-pill" data-i18n="s5.pill"></p>
+          <h2 class="h2" id="s5Title" data-i18n="s5.title"></h2>
+        </div>
+
+        <div class="c3-table-wrap" data-c3-reveal>
+          <table class="c3-table">
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="s5.otherShort"></th>
+                <th scope="col" data-i18n="s5.practicoShort"></th>
+              </tr>
+            </thead>
+            <tbody id="c3TableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================== 05 DIFERENCIALES -->
+    <section class="section" id="porque" aria-labelledby="s6Title">
+      <div class="container">
+        <div class="section-head c3-head">
+          <p class="c3-pill" data-i18n="s6.pill"></p>
+          <h2 class="h2" id="s6Title" data-i18n="s6.title"></h2>
+        </div>
+        <ol class="c3-list" id="c3Why" data-c3-reveal data-c3-reveal-list></ol>
+      </div>
+    </section>
+
+    <!-- Sin bloque de testimonios: no hay testimonios reales y el brief
+         prohíbe inventarlos. Por eso la página no tiene una sección de
+         clientes que hablan: sólo datos propios y copy de método. -->
+
+    <!-- ========================================================== CIERRE
+         Única banda navy de la página. El CTA es el único bloque terracota. -->
+    <section class="c3-close" id="cierre" aria-labelledby="closeLine">
+      <div class="container c3-close__inner">
+        <h2 class="c3-close__line" id="closeLine" data-i18n="s7.line"></h2>
+        <div class="c3-close__actions">
+          <a class="btn c3-btn-accent" href="#" data-mailto="conversar" data-i18n="s7.cta"></a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer c3-footer">
+    <div class="container">
+      <div class="footer__top">
+        <div class="c3-footer__brand">
+          <img class="footer__lockup" src="assets/img/practico-lockup-sin-tagline.svg" alt="Práctico" data-i18n-alt="brand.logoAlt">
+          <p class="footer__tagline" data-i18n="footer.tagline"></p>
+        </div>
+        <div>
+          <p class="footer__heading" data-i18n="footer.servicesTitle"></p>
+          <ul class="footer__list" id="footServices"></ul>
+        </div>
+        <div>
+          <p class="footer__heading" data-i18n="footer.companyTitle"></p>
+          <ul class="footer__list" id="footCompany"></ul>
+        </div>
+        <div>
+          <p class="footer__heading" data-i18n="footer.contactTitle"></p>
+          <ul class="footer__list">
+            <li><a class="footer__link" href="#" data-contact-plain></a></li>
+            <li><a class="footer__link" href="#" data-mailto="conversar" data-i18n="footer.contactLink"></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__descriptor" data-i18n="footer.descriptor"></p>
+        <p>© <span data-year>2026</span> Práctico. <span data-i18n="footer.legal"></span></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/core2.js" defer></script>
+  <script src="assets/js/data-c3.js" defer></script>
+  <script src="assets/js/c3.js" defer></script>
+</body>
+</html>
